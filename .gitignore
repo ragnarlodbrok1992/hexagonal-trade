@@ -1,0 +1,6 @@
+venv/
+tags
+
+__init__.py
+*.pyc
+
