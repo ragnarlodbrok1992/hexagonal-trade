@@ -8,6 +8,7 @@ from OpenGL.GL.shaders import compileProgram, compileShader
 
 # Local imports
 from entities.cube.cube import cube_vertices, cube_indices
+from entities.triangle.triangle import triangle_vertices, triangle_indices
 
 # Window dimensions
 WINDOW_WIDTH = 800
@@ -36,7 +37,7 @@ out vec4 FragColor;
 
 void main()
 {
-  FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+  FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }
 """
 
@@ -55,6 +56,11 @@ def framebuffer_size_callback(window, width, height):
 
 def main():
     global delta_time, last_frame, camera_pos, camera_front, camera_up, yaw, pitch, first_mouse
+
+    # Global first frame defines
+    camera_pos = glm.vec3(0.0, 0.0, 3.0)
+    camera_front = glm.vec3(0.0, 0.0, -1.0)
+    camera_up = glm.vec3(0.0, 1.0, 0.0)
 
     # Initialize the library
     if not glfw.init():
@@ -107,7 +113,28 @@ def main():
         # Render here, e.g. using pyOpenGL
         glClearColor(0.2, 0.3, 0.3, 1.0)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        
+        # Use shader program
+        glUseProgram(shader)
 
+        # Set up view and projection matrices
+        view_matrix = glm.lookAt(camera_pos, camera_pos + camera_front, camera_up)
+        projection_matrix = glm.perspective(glm.radians(45), WINDOW_WIDTH / WINDOW_HEIGHT, 0.1, 100.0)
+
+        # Push data into uniforms
+        glUniformMatrix4fv(view_loc, 1, GL_FALSE, glm.value_ptr(view_matrix))
+        glUniformMatrix4fv(projection_loc, 1, GL_FALSE, glm.value_ptr(projection_matrix))
+
+        # Draw cube
+        for i in range(10):
+            model_matrix = glm.mat4(1.0)
+            # model_matrix = glm.translate(model_matrix, glm.vec3(1.0 * i, 0.0, 0.0))
+
+            glUniformMatrix4fv(model_loc, 1, GL_FALSE, glm.value_ptr(model_matrix))
+
+            glDrawElements(GL_TRIANGLES, len(cube_indices), GL_UNSIGNED_INT, None)
+
+        # Swap front and back buffers
         glfw.swap_buffers(window)
 
     # Last engine call
