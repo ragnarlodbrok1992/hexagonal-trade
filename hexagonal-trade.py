@@ -9,7 +9,8 @@ from OpenGL.GL.shaders import compileProgram, compileShader
 # Local imports
 from entities.cube.cube import cube_vertices, cube_indices
 from entities.triangle.triangle import triangle_vertices, triangle_indices
-from entities.camera.camera import Camera
+from entities.camera.camera import Camera, camera_pos, camera_front, camera_up
+from entities.camera.camera import CAM_MOV_UP, CAM_MOV_DOWN, CAM_MOV_LEFT, CAM_MOV_RIGHT, CAM_MOV_FRONT, CAM_MOV_BACK
 
 # Window dimensions
 WINDOW_WIDTH = 800
@@ -72,19 +73,47 @@ def mouse_callback(window, xpos, ypos):
         camera_front = Camera.rotate_yaw(camera_front, x_diff)
         camera_front = Camera.rotate_pitch(camera_front, y_diff)
 
-    print(f"Camera front: {camera_front}")
-    print(f"SPACE_KEY_PRESSED: {SPACE_KEY_PRESSED}")
-
 def key_callback(window, key, scancode, action, mods):
     global SPACE_KEY_PRESSED
+    global camera_pos, camera_front, camera_up
+    global CAM_MOV_UP, CAM_MOV_DOWN, CAM_MOV_LEFT, CAM_MOV_RIGHT, CAM_MOV_FRONT, CAM_MOV_BACK
 
+    # Engine exit
     if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
         glfw.set_window_should_close(window, True)
+
+    # Camera controls - rotation
     if key == glfw.KEY_SPACE and action == glfw.PRESS:
         SPACE_KEY_PRESSED = True
     if key == glfw.KEY_SPACE and action == glfw.RELEASE:
         SPACE_KEY_PRESSED = False
 
+    # Camera controls - WASD
+    if key == glfw.KEY_W and action == glfw.PRESS:
+        CAM_MOV_UP = True
+    elif key == glfw.KEY_S and action == glfw.PRESS:
+        CAM_MOV_DOWN = True
+    elif key == glfw.KEY_A and action == glfw.PRESS:
+        CAM_MOV_LEFT = True
+    elif key == glfw.KEY_D and action == glfw.PRESS:
+        CAM_MOV_RIGHT = True
+    elif key == glfw.KEY_Q and action == glfw.PRESS:
+        CAM_MOV_FRONT = True
+    elif key == glfw.KEY_E and action == glfw.PRESS:
+        CAM_MOV_BACK = True
+
+    if key == glfw.KEY_W and action == glfw.RELEASE:
+        CAM_MOV_UP = False
+    elif key == glfw.KEY_S and action == glfw.RELEASE:
+        CAM_MOV_DOWN = False
+    elif key == glfw.KEY_A and action == glfw.RELEASE:
+        CAM_MOV_LEFT = False
+    elif key == glfw.KEY_D and action == glfw.RELEASE:
+        CAM_MOV_RIGHT = False
+    elif key == glfw.KEY_Q and action == glfw.RELEASE:
+        CAM_MOV_FRONT = False
+    elif key == glfw.KEY_E and action == glfw.RELEASE:
+        CAM_MOV_BACK = False
 
 def framebuffer_size_callback(window, width, height):
     glViewport(0, 0, width, height)
@@ -92,11 +121,7 @@ def framebuffer_size_callback(window, width, height):
 
 def main():
     global delta_time, last_frame, camera_pos, camera_front, camera_up, yaw, pitch, first_mouse
-
-    # Global first frame defines
-    camera_pos = glm.vec3(1.0, 1.0, 3.0)
-    camera_front = glm.vec3(-0.5, 0.0, -1.0)
-    camera_up = glm.vec3(0.0, 1.0, 0.0)
+    global CAM_MOV_UP, CAM_MOV_DOWN, CAM_MOV_LEFT, CAM_MOV_RIGHT
 
     # Initialize the library
     if not glfw.init():
@@ -159,6 +184,9 @@ def main():
     while not glfw.window_should_close(window):
         # Poll for and process events
         glfw.poll_events()
+
+        # Camera movement
+        Camera.camera_movement(CAM_MOV_UP, CAM_MOV_DOWN, CAM_MOV_LEFT, CAM_MOV_RIGHT, CAM_MOV_FRONT, CAM_MOV_BACK)
 
         # Render here, e.g. using pyOpenGL
         glClearColor(0.2, 0.3, 0.3, 1.0)
