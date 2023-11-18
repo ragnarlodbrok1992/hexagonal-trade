@@ -36,8 +36,10 @@ class Camera:
         return glm.vec3(R_yaw @ camera_front)
 
     @staticmethod
-    def camera_movement(cam_mov_up, cam_mov_down, cam_mov_left, cam_mov_right, cam_move_front, cam_move_back):
-        global camera_pos, camera_front, camera_up
+    def camera_movement(camera_front, cam_mov_up, cam_mov_down, cam_mov_left, cam_mov_right, cam_move_front, cam_move_back):
+        global camera_pos, camera_up
+
+        print(f"camera_front: {camera_front}")
 
         if cam_mov_up:
             camera_pos += 0.05 * camera_up
@@ -48,9 +50,7 @@ class Camera:
         if cam_mov_right:
             camera_pos += glm.normalize(glm.cross(camera_front, camera_up)) * 0.05
         if cam_move_front:
-            print("Moving front")
             camera_pos += 0.05 * camera_front
         if cam_move_back:
-            print("Moving back")
             camera_pos -= 0.05 * camera_front
 

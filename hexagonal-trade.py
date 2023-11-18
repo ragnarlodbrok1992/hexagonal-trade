@@ -147,6 +147,9 @@ def main():
     # GL depth testing
     glEnable(GL_DEPTH_TEST)
 
+    # VSYNC
+    glfw.swap_interval(1)
+
      # Compile shaders and link program
     shader = compileProgram(
         compileShader(VERTEX_SHADER_SOURCE, GL_VERTEX_SHADER),
@@ -186,7 +189,7 @@ def main():
         glfw.poll_events()
 
         # Camera movement
-        Camera.camera_movement(CAM_MOV_UP, CAM_MOV_DOWN, CAM_MOV_LEFT, CAM_MOV_RIGHT, CAM_MOV_FRONT, CAM_MOV_BACK)
+        Camera.camera_movement(camera_front, CAM_MOV_UP, CAM_MOV_DOWN, CAM_MOV_LEFT, CAM_MOV_RIGHT, CAM_MOV_FRONT, CAM_MOV_BACK)
 
         # Render here, e.g. using pyOpenGL
         glClearColor(0.2, 0.3, 0.3, 1.0)
