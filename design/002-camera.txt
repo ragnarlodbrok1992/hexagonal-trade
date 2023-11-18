@@ -1,0 +1,10 @@
+1. Vectors in 3D space are camera.
+
+  In GLM we have three things represented as vectors: center of camera, where camera is looking at
+  and up vector.
+
+2. Mouse movements as pitch and yaw of camera.
+
+  ( We do not consider roll, camera will always point upwards (0, 1, 0) )
+  We use Euler angles to represent camera rotation. We have two angles: pitch and yaw.
+  Pitch is rotating around X axis and yaw is rotating around Y axis. (I think).

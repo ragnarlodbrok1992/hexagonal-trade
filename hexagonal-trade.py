@@ -9,10 +9,17 @@ from OpenGL.GL.shaders import compileProgram, compileShader
 # Local imports
 from entities.cube.cube import cube_vertices, cube_indices
 from entities.triangle.triangle import triangle_vertices, triangle_indices
+from entities.camera.camera import Camera
 
 # Window dimensions
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
+
+# Global initializations
+LAST_MOUSE_XPOS = 0.0
+LAST_MOUSE_YPOS = 0.0
+
+SPACE_KEY_PRESSED = False
 
 # Vertex shader
 VERTEX_SHADER_SOURCE = """
@@ -49,11 +56,34 @@ void main()
 
 # Callback functions
 def mouse_callback(window, xpos, ypos):
-    print(f"Mouse moved - xpos: {xpos}, ypos: {ypos}")
+    global LAST_MOUSE_XPOS, LAST_MOUSE_YPOS
+    global SPACE_KEY_PRESSED
+    global camera_front
+
+    # Calculate xpos and ypos difference
+    x_diff = xpos - LAST_MOUSE_XPOS
+    y_diff = ypos - LAST_MOUSE_YPOS
+
+    # Update last xpos and ypos
+    LAST_MOUSE_XPOS = xpos
+    LAST_MOUSE_YPOS = ypos
+
+    if SPACE_KEY_PRESSED:
+        camera_front = Camera.rotate_yaw(camera_front, x_diff)
+        camera_front = Camera.rotate_pitch(camera_front, y_diff)
+
+    print(f"Camera front: {camera_front}")
+    print(f"SPACE_KEY_PRESSED: {SPACE_KEY_PRESSED}")
 
 def key_callback(window, key, scancode, action, mods):
+    global SPACE_KEY_PRESSED
+
     if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
         glfw.set_window_should_close(window, True)
+    if key == glfw.KEY_SPACE and action == glfw.PRESS:
+        SPACE_KEY_PRESSED = True
+    if key == glfw.KEY_SPACE and action == glfw.RELEASE:
+        SPACE_KEY_PRESSED = False
 
 
 def framebuffer_size_callback(window, width, height):
@@ -65,7 +95,7 @@ def main():
 
     # Global first frame defines
     camera_pos = glm.vec3(1.0, 1.0, 3.0)
-    camera_front = glm.vec3(0.0, 0.0, 0.0)
+    camera_front = glm.vec3(-0.5, 0.0, -1.0)
     camera_up = glm.vec3(0.0, 1.0, 0.0)
 
     # Initialize the library
@@ -87,6 +117,7 @@ def main():
     glfw.make_context_current(window)
     glfw.set_framebuffer_size_callback(window, framebuffer_size_callback)
     glfw.set_key_callback(window, key_callback)
+    glfw.set_cursor_pos_callback(window, mouse_callback)
 
     # GL depth testing
     glEnable(GL_DEPTH_TEST)
@@ -138,8 +169,8 @@ def main():
 
         # Set up view and projection matrices
         model_matrix = glm.mat4(1.0)
-        # view_matrix = glm.lookAt(camera_pos, camera_pos + camera_front, camera_up)
-        view_matrix = glm.lookAt(glm.vec3(1, 1, 3), glm.vec3(0, 0, 0), glm.vec3(0, 1, 0))
+        view_matrix = glm.lookAt(camera_pos, camera_pos + camera_front, camera_up)
+        # view_matrix = glm.lookAt(glm.vec3(1, 1, 3), glm.vec3(0, 0, 0), glm.vec3(0, 1, 0))
         projection_matrix = glm.perspective(glm.radians(45.0), WINDOW_WIDTH / WINDOW_HEIGHT, 0.1, 100.0)
 
         # Uniforms - MVP
