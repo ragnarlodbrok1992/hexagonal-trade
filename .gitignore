@@ -1,6 +1,5 @@
-venv/
 tags
+tags.temp
+tags.lock
 
-__init__.py
-*.pyc
 
