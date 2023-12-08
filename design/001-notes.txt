@@ -1,0 +1,11 @@
+1. Hexagonal Trade - game.
+
+  Game about trading good between cities (ports? outposts?) on a hexagonal grid.
+  To confuse things the game will be in real time.
+  Not much to say here at the start, but we will come up with something as we go along.
+  Now onto free flow of ideas.
+
+2. Ideas - design for starters, might trim later (or not).
+
+  - 
+
