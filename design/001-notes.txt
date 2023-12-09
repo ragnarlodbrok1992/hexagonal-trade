@@ -12,5 +12,18 @@
 3. Tasks - what needs to be done to make this things happen
 
   - Opening window - Should we use create_window function? [DONE]
-  - Add GL library and SIMP library
+  - Add GL library and SIMP library [DONE] for Simp
+  - Render triangle and hexagon (2D ish)
+  - Add movable camera (mouse and keyboard)
+  - Add lines and grid as debugable UI elements
+  - Create a 3D model of hexagonal grid as a base
+  - Create a hexmap of hexagonal grid models
+  - Create different element that will be a voxel based water @TODO(ragnar): This requires more research
+    - Those are connecting and animate together
+  - Create a geometry on hexagonal grids as entities
+    - Buildings
+    - Ports
+    - Trees
 
+  a. Voxel water
+  

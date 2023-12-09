@@ -58,6 +58,8 @@ message_loop :: () {
         }
       case .COMPLETE;
         print("  Complete: \n");
+        // @TODO(ragnar): We should jump out of infinite loop here, duh!
+        break;
       case .ERROR;
         // @TODO(ragnar): Handle error messages from compiler
         print("  Error: \n");

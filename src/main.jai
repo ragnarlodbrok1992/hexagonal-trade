@@ -10,11 +10,16 @@
 Simp    :: #import "Simp";
 GetRect :: #import "GetRect";
 
+// Local imports
+#load "shaders.jai";
+#load "entities/triangle.jai";
+
 // Engine constants
 BAR_TITLE :: "Hexagonal Trade Engine";
 WINDOW_WIDTH :: 800;
 WINDOW_HEIGHT :: 600;
 ENGINE_RUNNING := true;
+
 
 // Main entry function
 main :: () {
@@ -38,6 +43,20 @@ main :: () {
   // Render target for simp
   // @TODO(ragnar): It doesn't work for me
   Simp.set_render_target(window);
+
+  // Loading shaders and stuff
+  default_shader_program := load_shaders();
+
+  // DEBUG STUFF
+  // Debug triangle
+  triangle : DebugTriangle;
+
+  #if 0
+    print("Default shader program: %\n", default_shader_program);
+  #if 1 {
+    print("Triangle vertices and colors: %\n", triangle.TRIANGLE_VERTICES_AND_COLORS);
+    print("Triangle indices:             %\n", triangle.TRIANGLE_INDICES);
+  }
 
   while ENGINE_RUNNING {
     // Start of frame
