@@ -11,5 +11,6 @@
 
 3. Tasks - what needs to be done to make this things happen
 
-  - Opening window - Should we use create_window function?
+  - Opening window - Should we use create_window function? [DONE]
+  - Add GL library and SIMP library
 
