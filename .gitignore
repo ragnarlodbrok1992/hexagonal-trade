@@ -2,4 +2,8 @@ tags
 tags.temp
 tags.lock
 
+.build/
+
+*.exe
+*.pdb
 

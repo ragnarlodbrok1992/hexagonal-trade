@@ -7,5 +7,9 @@
 
 2. Ideas - design for starters, might trim later (or not).
 
-  - 
+  - 3D hexagonal grid with different textures (texture-maps), heights and custom voxel based water.
+
+3. Tasks - what needs to be done to make this things happen
+
+  - Opening window - Should we use create_window function?
 
